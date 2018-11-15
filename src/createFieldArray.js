@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import invariant from 'invariant'
 import createConnectedFieldArray from './ConnectedFieldArray'
 import prefixName from './util/prefixName'
+import plain from './structure/plain'
 import type {
   ConnectedComponent,
   Structure,
@@ -60,11 +61,21 @@ const createFieldArray = (structure: Structure<*, *>) => {
       const oldName = prefixName(this.context, this.props.name)
       const newName = prefixName(nextContext, nextProps.name)
 
-      if (oldName !== newName) {
+      if (
+        oldName !== newName ||
+        // use deepEqual here because they could be a function or an array of functions
+        !plain.deepEqual(this.props.validate, nextProps.validate) ||
+        !plain.deepEqual(this.props.warn, nextProps.warn)
+      ) {
         // unregister old name
         this.context._reduxForm.unregister(oldName)
         // register new name
-        this.context._reduxForm.register(newName, 'FieldArray')
+        this.context._reduxForm.register(
+          newName,
+          'FieldArray',
+          () => wrapError(nextProps.validate, '_error'),
+          () => wrapError(nextProps.warn, '_warning')
+        )
       }
     }
 

@@ -1261,6 +1261,64 @@ const describeFieldArray = (name, structure, combineReducers, setup) => {
       expect(renderArray.mock.calls[1][0].meta.warning).toBe('Too many')
     })
 
+    it('should update field level validation when validate prop changes', () => {
+      const store = makeStore()
+      const renderArray = jest.fn(({ fields }) => (
+        <div>
+          {fields.map((name, index) => (
+            <Field name={`${name}`} component="input" key={index} />
+          ))}
+        </div>
+      ))
+      const required = jest.fn(
+        value => (value && size(value) ? undefined : 'Required')
+      )
+      class Form extends Component {
+        constructor() {
+          super()
+          this.state = { validate: () => undefined }
+        }
+
+        render() {
+          return (
+            <div>
+              <FieldArray
+                name="foo"
+                component={renderArray}
+                validate={this.state.validate}
+              />
+              <button onClick={() => this.setState({ validate: required })}>
+                Change
+              </button>
+            </div>
+          )
+        }
+      }
+      const TestForm = reduxForm({
+        form: 'testForm'
+      })(Form)
+      const dom = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          <TestForm />
+        </Provider>
+      )
+
+      expect(renderArray).toHaveBeenCalled()
+      expect(renderArray).toHaveBeenCalledTimes(1)
+      expect(renderArray.mock.calls[0][0].meta.valid).toBe(true)
+      expect(required).toHaveBeenCalledTimes(0)
+
+      // update validate prop
+      const button = TestUtils.findRenderedDOMComponentWithTag(dom, 'button')
+      TestUtils.Simulate.click(button)
+
+      // should be invalid now
+      expect(renderArray).toHaveBeenCalled()
+      expect(renderArray).toHaveBeenCalledTimes(3)
+      expect(required).toHaveBeenCalledTimes(1)
+      expect(renderArray.mock.calls[2][0].meta.valid).toBe(false)
+    })
+
     it('should provide field-level sync warning (with multiple validators) for array field', () => {
       const store = makeStore({
         testForm: {
