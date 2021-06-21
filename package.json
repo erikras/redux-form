@@ -53,7 +53,7 @@
     "hoist-non-react-statics": "^3.3.2",
     "invariant": "^2.2.4",
     "is-promise": "^2.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "prop-types": "^15.6.1",
     "react-is": "^16.4.2"
   },
