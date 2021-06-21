@@ -1,6 +1,6 @@
 // @flow
 import type {Node, Component} from 'react'
-import type { Event, Context } from './types'
+import type { Context, OptimisticSyntheticDragEvent, OptimisticSyntheticFocusEvent } from './types'
 
 export type InstanceApi = {
   name: string,
@@ -21,16 +21,16 @@ export type Props = {
   asyncError: any,
   asyncValidating: boolean,
   onBlur: {
-    (event: Event, newValue: ?any, previousValue: ?any, name: string): void
+    (event: OptimisticSyntheticFocusEvent, newValue: ?any, previousValue: ?any, name: string): void
   },
   onChange: {
-    (event: Event, newValue: ?any, previousValue: ?any, name: string): void
+    (event: SyntheticInputEvent<>, newValue: ?any, previousValue: ?any, name: string): void
   },
   onDrop: {
-    (event: Event, newValue: ?any, previousValue: ?any, name: string): void
+    (event: OptimisticSyntheticDragEvent, newValue: ?any, previousValue: ?any, name: string): void
   },
-  onDragStart: { (event: Event, name: string): void },
-  onFocus: { (event: Event, name: string): void },
+  onDragStart: { (event: OptimisticSyntheticDragEvent, name: string): void },
+  onFocus: { (event: OptimisticSyntheticFocusEvent, name: string): void },
   dirty: boolean,
   dispatch: { (action: any): void },
   form: string,

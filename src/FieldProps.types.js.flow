@@ -1,6 +1,6 @@
 // @flow
 import type { Dispatch } from 'redux'
-import type { Event, Validator } from './types'
+import type { OptimisticSyntheticDragEvent, OptimisticSyntheticFocusEvent, Validator } from './types'
 import type { ComponentType, ElementRef } from 'react'
 
 type FieldTypeProps = {
@@ -26,25 +26,25 @@ export type Props = {
     name: string
   ) => ?any,
   onBlur?: (
-    event: Event,
+    event: OptimisticSyntheticFocusEvent,
     newValue: any,
     previousValue: any,
     name: string
   ) => void,
   onChange?: (
-    event: Event,
+    event: SyntheticInputEvent<>,
     newValue: any,
     previousValue: any,
     name: string
   ) => void,
-  onDragStart?: (event: Event, name: string) => void,
+  onDragStart?: (event: OptimisticSyntheticDragEvent, name: string) => void,
   onDrop?: (
-    event: Event,
+    event: OptimisticSyntheticDragEvent,
     newValue: any,
     previousValue: any,
     name: string
   ) => void,
-  onFocus?: (event: Event, name: string) => void,
+  onFocus?: (event: OptimisticSyntheticFocusEvent, name: string) => void,
   parse?: (value: any, name: string) => any,
   props?: Object,
   type?: string,
@@ -57,11 +57,11 @@ export type Props = {
 export type InputProps = {
   checked?: boolean,
   name: string,
-  onBlur: { (eventOrValue: Event | any): void },
-  onChange: { (eventOrValue: Event | any): void },
-  onDrop: { (event: Event): void },
-  onDragStart: { (event: Event): void },
-  onFocus: { (event: Event): void },
+  onBlur: { (eventOrValue: OptimisticSyntheticFocusEvent | any): void },
+  onChange: { (eventOrValue: SyntheticInputEvent<> | any): void },
+  onDrop: { (event: OptimisticSyntheticDragEvent): void },
+  onDragStart: { (event: OptimisticSyntheticDragEvent): void },
+  onFocus: { (event: OptimisticSyntheticFocusEvent): void },
   value: any
 }
 

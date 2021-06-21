@@ -1,5 +1,5 @@
 // @flow
-import type { Event, Structure } from './types'
+import type { OptimisticSyntheticDragEvent, OptimisticSyntheticFocusEvent, Structure } from './types'
 import type { Dispatch } from 'redux'
 import type { FieldProps, InputProps } from './FieldProps.types'
 
@@ -7,16 +7,31 @@ export type Props = {
   asyncError: any,
   asyncValidating: boolean,
   onBlur: {
-    (event: Event, newValue: ?any, previousValue: ?any, name: ?string): void
+    (
+      event: OptimisticSyntheticFocusEvent,
+      newValue: ?any,
+      previousValue: ?any,
+      name: ?string
+    ): void
   },
   onChange: {
-    (event: Event, newValue: ?any, previousValue: ?any, name: ?string): void
+    (
+      event: SyntheticInputEvent<>,
+      newValue: ?any,
+      previousValue: ?any,
+      name: ?string
+    ): void
   },
   onDrop: {
-    (event: Event, newValue: ?any, previousValue: ?any, name: ?string): void
+    (
+      event: OptimisticSyntheticDragEvent,
+      newValue: ?any,
+      previousValue: ?any,
+      name: ?string
+    ): void
   },
-  onDragStart: { (event: Event, name: ?string): void },
-  onFocus: { (event: Event, name: ?string): void },
+  onDragStart: { (event: OptimisticSyntheticDragEvent, name: ?string): void },
+  onFocus: { (event: OptimisticSyntheticFocusEvent, name: ?string): void },
   dirty: boolean,
   dispatch: Dispatch<any>,
   form: string,

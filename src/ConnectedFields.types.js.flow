@@ -1,6 +1,6 @@
 // @flow
 import type { Node } from 'react'
-import type { Structure, Event, Context } from './types'
+import type { Structure, Context, OptimisticSyntheticDragEvent, OptimisticSyntheticFocusEvent } from './types'
 
 export type Props = {
   names: string[],
@@ -19,11 +19,11 @@ export type Props = {
       // validate, warn, parse, format, normalize, etc.
       asyncError: any,
       asyncValidating: boolean,
-      onBlur: { (event: Event, newValue: ?any, previousValue: ?any): void },
-      onChange: { (event: Event, newValue: ?any, previousValue: ?any): void },
-      onDrop: { (event: Event, newValue: ?any, previousValue: ?any): void },
-      onDragStart: { (event: Event): void },
-      onFocus: { (event: Event): void },
+      onBlur: { (event: OptimisticSyntheticFocusEvent, newValue: ?any, previousValue: ?any): void },
+      onChange: { (event: SyntheticInputEvent<>, newValue: ?any, previousValue: ?any): void },
+      onDrop: { (event: OptimisticSyntheticDragEvent, newValue: ?any, previousValue: ?any): void },
+      onDragStart: { (event: OptimisticSyntheticDragEvent): void },
+      onFocus: { (event: OptimisticSyntheticFocusEvent): void },
       dirty: boolean,
       dispatch: { (action: any): void },
       form: string,

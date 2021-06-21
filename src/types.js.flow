@@ -45,25 +45,23 @@ export type Option = {
   value: any
 }
 
-export type Event = {
-  preventDefault(): void,
-  stopPropagation(): void,
-  target: {
-    value: any,
-    type: string,
-    options?: Array<Option>,
-    checked?: boolean,
-    files?: Array<Object>
-  },
-  dataTransfer: {
-    files: Array<Object>,
-    getData: { (key: string): any },
-    setData: { (key: string, data: any): void }
-  },
-  nativeEvent?: {
-    text?: string
-  }
+/*
+ * React-DOM's default typing of drag and focus events is built for the general case, where the target is not necessarily
+ * an HTMLInputElement. They can be specialized with a type parameter, but that only affects the currentTarget element,
+ * not the target. We should maybe be using currentTarget internally, but for backwards-compatibility's sake we'll extend
+ * these to specify that the target is what we expect
+ *
+ * "Optimistic" because we're being optimistic about the browser always doing what we expect
+ */
+export interface OptimisticSyntheticDragEvent extends SyntheticDragEvent<HTMLInputElement> {
+  target: HTMLInputElement
 }
+
+export interface OptimisticSyntheticFocusEvent extends SyntheticFocusEvent<HTMLInputElement> {
+  target: HTMLInputElement
+}
+
+export type Event = SyntheticInputEvent<> | OptimisticSyntheticDragEvent | OptimisticSyntheticFocusEvent
 
 export type Context = {
   form: string,
