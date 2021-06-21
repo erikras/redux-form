@@ -174,7 +174,7 @@ The `component` prop will be passed to
 [`React.createElement()`](https://reactjs.org/docs/react-api.html#createelement),
 which accepts one of three possible things:
 
-### 1. A normal component
+### 1. A class component
 
 This can be any component class that you have written or have imported from a third party library.
 
@@ -214,19 +214,19 @@ import MyCustomInput from './MyCustomInput'
 
 To learn what props will be passed to your component, see the [Props](#props) section below.
 
-### 2. A stateless function
+### 2. A stateless function component
 
 This is the most flexible way to use `<Field>`, as it gives you complete control over how the
 input is rendered. It is especially useful for displaying validation errors. It will also be the
 most familiar to people migrating from previous versions of `redux-form`. **You must define the
-stateless function outside of your `render()` method, or else it will be recreated on every
+stateless function component outside of your `render()` method, or else it will be recreated on every
 render and will force the `Field` to rerender because its `component` prop will be different.**
-If you are defining your stateless function inside of `render()`, it will not only be slower, but
+If you are defining your stateless function component inside of `render()`, it will not only be slower, but
 your input will lose focus whenever the entire form component rerenders.
 
 ```js
 // outside your render() method
-const renderField = (field) => (
+const MyCustomInput = (field) => (
     <div className="input-row">
       <input {...field.input} type="text"/>
       {field.meta.touched && field.meta.error &&
@@ -235,7 +235,7 @@ const renderField = (field) => (
   )
 
 // inside your render() method
-<Field name="myField" component={renderField}/>
+<Field name="myField" component={MyCustomInput}/>
 ```
 
 To learn what props will be passed to your stateless function, see the [Props](#props) section
