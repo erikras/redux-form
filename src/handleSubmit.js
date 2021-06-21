@@ -115,7 +115,7 @@ const handleSubmit = (
           if (onSubmitFail) {
             onSubmitFail(asyncErrors, dispatch, null, props)
           }
-          return Promise.reject(asyncErrors)
+          return asyncErrors
         })
     } else {
       return executeSubmit(submit, fields, props)

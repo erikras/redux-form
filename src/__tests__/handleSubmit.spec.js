@@ -4,6 +4,8 @@ import { noop } from 'lodash'
 
 describe('handleSubmit', () => {
   it('should stop if sync validation fails', () => {
+    expect.assertions(7)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const startSubmit = jest.fn()
@@ -33,6 +35,8 @@ describe('handleSubmit', () => {
   })
 
   it('should stop and return errors if sync validation fails', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const syncErrors = { foo: 'error' }
@@ -65,6 +69,8 @@ describe('handleSubmit', () => {
   })
 
   it('should return result of sync submit', () => {
+    expect.assertions(7)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const dispatch = noop
@@ -95,6 +101,8 @@ describe('handleSubmit', () => {
   })
 
   it('should not submit if async validation fails', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const dispatch = noop
@@ -114,23 +122,21 @@ describe('handleSubmit', () => {
       values
     }
 
-    return handleSubmit(submit, props, true, asyncValidate, ['foo', 'baz'])
-      .then(() => {
-        throw new Error('Expected to fail')
-      })
-      .catch(result => {
-        expect(result).toBe(values)
-        expect(asyncValidate).toHaveBeenCalledWith()
-        expect(submit).not.toHaveBeenCalled()
-        expect(startSubmit).not.toHaveBeenCalled()
-        expect(stopSubmit).not.toHaveBeenCalled()
-        expect(touch).toHaveBeenCalledWith('foo', 'baz')
-        expect(setSubmitSucceeded).not.toHaveBeenCalled()
-        expect(setSubmitFailed).toHaveBeenCalledWith('foo', 'baz')
-      })
+    return handleSubmit(submit, props, true, asyncValidate, ['foo', 'baz']).then(result => {
+      expect(result).toBe(values)
+      expect(asyncValidate).toHaveBeenCalledWith()
+      expect(submit).not.toHaveBeenCalled()
+      expect(startSubmit).not.toHaveBeenCalled()
+      expect(stopSubmit).not.toHaveBeenCalled()
+      expect(touch).toHaveBeenCalledWith('foo', 'baz')
+      expect(setSubmitSucceeded).not.toHaveBeenCalled()
+      expect(setSubmitFailed).toHaveBeenCalledWith('foo', 'baz')
+    })
   })
 
   it('should call onSubmitFail with async errors and dispatch if async validation fails and onSubmitFail is defined', () => {
+    expect.assertions(13)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const dispatch = noop
@@ -152,28 +158,26 @@ describe('handleSubmit', () => {
       values
     }
 
-    return handleSubmit(submit, props, true, asyncValidate, ['foo', 'baz'])
-      .then(() => {
-        throw new Error('Expected to fail')
-      })
-      .catch(result => {
-        expect(result).toBe(values)
-        expect(asyncValidate).toHaveBeenCalledWith()
-        expect(submit).not.toHaveBeenCalled()
-        expect(startSubmit).not.toHaveBeenCalled()
-        expect(stopSubmit).not.toHaveBeenCalled()
-        expect(onSubmitFail).toHaveBeenCalled()
-        expect(onSubmitFail.mock.calls[0][0]).toEqual(values)
-        expect(onSubmitFail.mock.calls[0][1]).toEqual(dispatch)
-        expect(onSubmitFail.mock.calls[0][2]).toBe(null)
-        expect(onSubmitFail.mock.calls[0][3]).toEqual(props)
-        expect(touch).toHaveBeenCalledWith('foo', 'baz')
-        expect(setSubmitSucceeded).not.toHaveBeenCalled()
-        expect(setSubmitFailed).toHaveBeenCalledWith('foo', 'baz')
-      })
+    return handleSubmit(submit, props, true, asyncValidate, ['foo', 'baz']).then(result => {
+      expect(result).toBe(values)
+      expect(asyncValidate).toHaveBeenCalledWith()
+      expect(submit).not.toHaveBeenCalled()
+      expect(startSubmit).not.toHaveBeenCalled()
+      expect(stopSubmit).not.toHaveBeenCalled()
+      expect(onSubmitFail).toHaveBeenCalled()
+      expect(onSubmitFail.mock.calls[0][0]).toEqual(values)
+      expect(onSubmitFail.mock.calls[0][1]).toEqual(dispatch)
+      expect(onSubmitFail.mock.calls[0][2]).toBe(null)
+      expect(onSubmitFail.mock.calls[0][3]).toEqual(props)
+      expect(touch).toHaveBeenCalledWith('foo', 'baz')
+      expect(setSubmitSucceeded).not.toHaveBeenCalled()
+      expect(setSubmitFailed).toHaveBeenCalledWith('foo', 'baz')
+    })
   })
 
-  it('should not submit if async validation fails and return rejected promise', () => {
+  it('should not submit if async validation fails and returns errors', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const dispatch = noop
@@ -194,23 +198,21 @@ describe('handleSubmit', () => {
       values
     }
 
-    return handleSubmit(submit, props, true, asyncValidate, ['foo', 'baz'])
-      .then(() => {
-        throw new Error('Expected to fail')
-      })
-      .catch(result => {
-        expect(result).toBe(asyncErrors)
-        expect(asyncValidate).toHaveBeenCalledWith()
-        expect(submit).not.toHaveBeenCalled()
-        expect(startSubmit).not.toHaveBeenCalled()
-        expect(stopSubmit).not.toHaveBeenCalled()
-        expect(touch).toHaveBeenCalledWith('foo', 'baz')
-        expect(setSubmitSucceeded).not.toHaveBeenCalled()
-        expect(setSubmitFailed).toHaveBeenCalledWith('foo', 'baz')
-      })
+    return handleSubmit(submit, props, true, asyncValidate, ['foo', 'baz']).then(result => {
+      expect(result).toBe(asyncErrors)
+      expect(asyncValidate).toHaveBeenCalledWith()
+      expect(submit).not.toHaveBeenCalled()
+      expect(startSubmit).not.toHaveBeenCalled()
+      expect(stopSubmit).not.toHaveBeenCalled()
+      expect(touch).toHaveBeenCalledWith('foo', 'baz')
+      expect(setSubmitSucceeded).not.toHaveBeenCalled()
+      expect(setSubmitFailed).toHaveBeenCalledWith('foo', 'baz')
+    })
   })
 
   it('should sync submit if async validation passes', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const dispatch = noop
@@ -243,6 +245,8 @@ describe('handleSubmit', () => {
   })
 
   it('should async submit if async validation passes', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => Promise.resolve(69))
     const dispatch = noop
@@ -275,6 +279,8 @@ describe('handleSubmit', () => {
   })
 
   it('should set submit errors if async submit fails', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const submitErrors = { foo: 'submit error' }
     const submit = jest
@@ -310,6 +316,8 @@ describe('handleSubmit', () => {
   })
 
   it('should not set errors if rejected value not a SubmissionError', () => {
+    expect.assertions(9)
+
     const values = { foo: 'bar', baz: 42 }
     const submitErrors = { foo: 'submit error' }
     const submit = jest.fn().mockImplementation(() => Promise.reject(submitErrors))
@@ -336,8 +344,8 @@ describe('handleSubmit', () => {
     return handleSubmit(submit, props, true, asyncValidate, ['foo', 'baz'])
       .then(resolveSpy, errorSpy)
       .then(() => {
-        expect(resolveSpy).not.toHaveBeenCalled()
-        expect(errorSpy).toHaveBeenCalledWith(submitErrors)
+        expect(resolveSpy).toHaveBeenCalledWith(submitErrors)
+        expect(errorSpy).not.toHaveBeenCalled()
         expect(asyncValidate).toHaveBeenCalledWith()
         expect(submit).toHaveBeenCalledWith(values, dispatch, props)
         expect(startSubmit).toHaveBeenCalled()
@@ -349,6 +357,8 @@ describe('handleSubmit', () => {
   })
 
   it('should set submit errors if async submit fails and return rejected promise', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const submitErrors = { foo: 'submit error' }
     const submit = jest
@@ -384,6 +394,8 @@ describe('handleSubmit', () => {
   })
 
   it('should submit when there are old submit errors and persistentSubmitErrors is enabled', () => {
+    expect.assertions(1)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const startSubmit = jest.fn()
@@ -408,6 +420,8 @@ describe('handleSubmit', () => {
   })
 
   it('should not swallow errors', () => {
+    expect.assertions(2)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => {
       throw new Error('spline reticulation failed')
@@ -434,6 +448,8 @@ describe('handleSubmit', () => {
   })
 
   it('should not swallow async errors', () => {
+    expect.assertions(3)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest
       .fn()
@@ -466,6 +482,8 @@ describe('handleSubmit', () => {
   })
 
   it('should not swallow async errors when form is invalid', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const submit = jest.fn().mockImplementation(() => 69)
     const syncErrors = { baz: 'sync error' }
@@ -500,6 +518,8 @@ describe('handleSubmit', () => {
   })
 
   it('should dispatch submission', () => {
+    expect.assertions(8)
+
     const values = { foo: 'bar', baz: 42 }
     const mockAction = {}
     const submit = jest.fn().mockImplementation(() => mockAction)
