@@ -106,9 +106,12 @@ function createReducer<M, L>(structure: Structure<M, L>) {
       : state
   }
   const rootKeys = ['values', 'fields', 'submitErrors', 'asyncErrors']
-  const arraySplice = (state, field, index, removeNum, value) => {
+  const arraySplice = (state, field, index, removeNum, ...value) => {
     let result = state
-    const nonValuesValue = value != null ? empty : undefined
+    const realvalue = value.length == 0 ? undefined : value
+    const nonValuesValue = Array.isArray(realvalue)
+      ? value.map(value => (value != null ? empty : undefined))
+      : undefined
     result = doSplice(result, 'values', field, index, removeNum, value, true)
     result = doSplice(result, 'fields', field, index, removeNum, nonValuesValue)
     result = doPlainSplice(
@@ -228,7 +231,9 @@ function createReducer<M, L>(structure: Structure<M, L>) {
         payload
       }
     ) {
-      return arraySplice(state, field, index, removeNum, payload)
+      if (payload === undefined)
+        return arraySplice(state, field, index, removeNum)
+      else return arraySplice(state, field, index, removeNum, ...payload)
     },
     [ARRAY_SWAP](
       state,
@@ -254,7 +259,8 @@ function createReducer<M, L>(structure: Structure<M, L>) {
         payload
       }
     ) {
-      return arraySplice(state, field, 0, 0, payload)
+      if (payload === undefined) return arraySplice(state, field, 0, 0, payload)
+      else return arraySplice(state, field, 0, 0, ...payload)
     },
     [AUTOFILL](
       state,

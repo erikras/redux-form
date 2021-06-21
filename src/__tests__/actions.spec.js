@@ -224,7 +224,7 @@ describe('actions', () => {
         removeNum: 0
       },
 
-      payload: 'foo'
+      payload: ['foo']
     })
 
     expect(isFSA(arraySplice('myForm', 'myField', 2, 0, 'foo'))).toBe(true)
@@ -239,9 +239,7 @@ describe('actions', () => {
         removeNum: 2
       },
 
-      payload: {
-        foo: 'bar'
-      }
+      payload: [{ foo: 'bar' }]
     })
 
     expect(isFSA(arraySplice('myForm', 'myField', 3, 2, { foo: 'bar' }))).toBe(
@@ -258,7 +256,7 @@ describe('actions', () => {
         field: 'myField'
       },
 
-      payload: 'foo'
+      payload: ['foo']
     })
 
     expect(isFSA(arrayUnshift('myForm', 'myField', 'foo'))).toBe(true)

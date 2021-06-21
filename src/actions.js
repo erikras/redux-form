@@ -176,13 +176,13 @@ const arraySplice: ArraySplice = (
   field: string,
   index: number,
   removeNum: number,
-  value: any
+  ...value: any
 ): ArraySpliceAction => {
   const action: ArraySpliceAction = {
     type: ARRAY_SPLICE,
     meta: { form, field, index, removeNum }
   }
-  if (value !== undefined) {
+  if (Array.isArray(value) && value.length > 0) {
     action.payload = value
   }
   return action
@@ -206,12 +206,17 @@ const arraySwap: ArraySwap = (
 const arrayUnshift: ArrayUnshift = (
   form: string,
   field: string,
-  value: any
-): ArrayUnshiftAction => ({
-  type: ARRAY_UNSHIFT,
-  meta: { form, field },
-  payload: value
-})
+  ...value: any
+): ArrayUnshiftAction => {
+  const action: ArrayUnshiftAction = {
+    type: ARRAY_UNSHIFT,
+    meta: { form, field }
+  }
+  if (Array.isArray(value) && value.length > 0) {
+    action.payload = value
+  }
+  return action
+}
 
 const autofill: Autofill = (
   form: string,
