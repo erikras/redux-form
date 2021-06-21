@@ -24,7 +24,7 @@
     "build:umd:min": "cross-env NODE_ENV=production webpack src/index.js -o dist/redux-form.min.js",
     "clean": "rimraf dist lib es",
     "lint": "eslint src",
-    "prepublishOnly": "npm run lint && npm run test:cov && npm run test:flow && npm run clean && npm run build",
+    "prepare": "npm run build",
     "validate": "npm run lint && npm run test:cov && npm run test:flow && npm run clean && npm run build && size-limit",
     "test": "jest",
     "test:flow": "node scripts/patch-immutable-flow-error.js && flow check",
