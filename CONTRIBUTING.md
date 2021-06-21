@@ -20,12 +20,6 @@ Please try to keep your pull request focused in scope and avoid including unrela
 
 After you have submitted your pull request, we’ll try to get back to you as soon as possible. We may suggest some changes or improvements.
 
-Please format the code before submitting your pull request by running:
-
-```
-npm run format
-```
-
 # Instructions for new contributors
 
 - Make a fork of https://github.com/redux-form/redux-form and a branch off that fork
