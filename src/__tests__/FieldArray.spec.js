@@ -2325,7 +2325,7 @@ const describeFieldArray = (name, structure, combineReducers, setup) => {
           }
         }
       })
-      const renderField = jest.fn(field => <input {...field.input} />)
+      const renderField = jest.fn(field => <input key={field.input.name} {...field.input} />)
 
       const renderFields = jest.fn(({ foo }) => <div>{foo.map(renderField)}</div>)
 

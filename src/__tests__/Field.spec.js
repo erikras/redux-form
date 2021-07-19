@@ -545,6 +545,41 @@ const describeField = (name, structure, combineReducers, setup) => {
       expect(input.mock.calls[1][0].input.value).toBe('bar')
     })
 
+    it('should validate with initial value when initialValue is provided', () => {
+      const store = makeStore({})
+      const input = jest.fn(props => <input {...props.input} />)
+      const required = jest.fn(value => {
+        console.trace('required', value)
+        return value == null ? 'Required' : undefined
+      })
+      class Form extends Component {
+        render() {
+          return (
+            <div>
+              <Field name="foo" value="test" component={input} />
+            </div>
+          )
+        }
+      }
+      const TestForm = reduxForm({
+        form: 'testForm',
+        validate: required
+      })(Form)
+      TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          <TestForm initialValues={{ foo: 'bar' }} />
+        </Provider>
+      )
+      expect(input).toHaveBeenCalled()
+      expect(input).toHaveBeenCalledTimes(2)
+
+      // call validate only once with initial value
+      expect(required).toHaveBeenCalled()
+      expect(required).toHaveBeenCalledTimes(1)
+      expect(required.mock.calls[0][0]).toEqualMap({ foo: 'bar' })
+      expect(input.mock.calls[1][0].meta.error).toBeFalsy()
+    })
+
     it('should provide sync error for array field', () => {
       const store = makeStore({
         testForm: {
